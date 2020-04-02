@@ -1,6 +1,8 @@
 import React from "react";
+import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import "./nav.css";
+import { logoutUser } from "../../redux/actions/authActions";
 
 const Nav = (props) => {
     return (
@@ -16,7 +18,7 @@ const Nav = (props) => {
                 </div>
             </Link>
             <Link to={"/login"} className="nav-link">
-                <div className="nav-link-style">
+                <div className="nav-link-style" onClick={props.logout}>
                     <label className="nav-label">Log Out</label>
                 </div>
             </Link>
@@ -24,4 +26,12 @@ const Nav = (props) => {
     );
 }
 
-export default Nav;
+const mapStateToProps = (state) => ({
+    logout: state.auth
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    logout: () => dispatch(logoutUser())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);
