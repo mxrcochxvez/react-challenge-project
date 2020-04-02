@@ -20,6 +20,12 @@ class ViewOrders extends Component {
             });
     }
 
+    deleteOrder = userId => {
+
+        fetch(`${SERVER_IP}/api/delete-order`, { method: "post", headers: { "Accept": "application/json", "Content-type": "application/json" }, body: JSON.stringify({ id: userId }) })
+            .then(response => response.json())
+    }
+
     render() {
         return (
             <Template>
@@ -38,7 +44,7 @@ class ViewOrders extends Component {
                                  </div>
                                  <div className="col-md-4 view-order-right-col">
                                      <button className="btn btn-success">Edit</button>
-                                     <button className="btn btn-danger">Delete</button>
+                                     <button className="btn btn-danger" onClick={() => { this.deleteOrder(order._id)}}>Delete</button>
                                  </div>
                             </div>
                         );
