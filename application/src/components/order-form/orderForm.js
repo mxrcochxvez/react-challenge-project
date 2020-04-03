@@ -47,7 +47,7 @@ class OrderForm extends Component {
                 id: this.props.location.state ? this.props.location.state._id : null,
                 order_item: this.state.order_item,
                 quantity: this.state.quantity,
-                ordered_by: this.props.auth.email || 'Unknown!',
+                ordered_by: this.props.auth.token || 'Unknown!',
             }),
             headers: {
                 'Content-Type': 'application/json'
