@@ -1,16 +1,39 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Main, Login, OrderForm, ViewOrders } from '../components';
 
+const PrivateRoute = ({ Component, auth, ...rest }) => (
+	<Route
+		{...rest}
+		render={props => {
+			if (auth.token != null) {
+				return <Component {...props} />;
+			} else {
+				return <Redirect to="/login" />;
+			}
+		}}
+	/>
+);
+
 const AppRouter = (props) => {
+
+  const { auth } = props;
+
   return (
     <Router>
       <Route path="/" exact component={Main} />
       <Route path="/login" exact component={Login} />
+      {/* I had this set to a private route as well but I kept getting a bug where it would ask the
+      user to sign in twice. */}
       <Route path="/order" exact component={OrderForm} />
-      <Route path="/view-orders" exact component={ViewOrders} />
+      <PrivateRoute path="/view-orders" exact Component={ViewOrders} auth={auth} />
     </Router>
   );
 }
 
-export default AppRouter;
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+})
+
+export default connect(mapStateToProps, null)(AppRouter);

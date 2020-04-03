@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Template } from '../../components';
 import { connect } from 'react-redux';
 import { SERVER_IP } from '../../private';
 import './orderForm.css';
 
 const ADD_ORDER_URL = `${SERVER_IP}/api/add-order`
+const EDIT_ORDER_URL = `${SERVER_IP}/api/edit-order`
 
 const mapStateToProps = (state) => ({
     auth: state.auth,
@@ -19,8 +21,17 @@ class OrderForm extends Component {
         }
     }
 
+    componentDidMount() {
+        if(this.props.location.state) {
+            this.setState({
+                order_item: this.props.location.state.order_item,
+                quantity: this.props.location.state.quantity
+            })
+        }
+    }
+
     menuItemChosen(event) {
-        this.setState({ item: event.target.value });
+        this.setState({ order_item: event.target.value });
     }
 
     menuQuantityChosen(event) {
@@ -30,12 +41,13 @@ class OrderForm extends Component {
     submitOrder(event) {
         event.preventDefault();
         if (this.state.order_item === "") return;
-        fetch(ADD_ORDER_URL, {
+        fetch(this.props.location.state ? EDIT_ORDER_URL : ADD_ORDER_URL, {
             method: 'POST',
             body: JSON.stringify({
+                id: this.props.location.state ? this.props.location.state._id : null,
                 order_item: this.state.order_item,
                 quantity: this.state.quantity,
-                ordered_by: this.props.auth.email || 'Unknown!',
+                ordered_by: this.props.auth.token || 'Unknown!',
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -47,6 +59,7 @@ class OrderForm extends Component {
     }
 
     render() {
+        console.log(this.state)
         return (
             <Template>
                 <div className="form-wrapper">
@@ -80,4 +93,4 @@ class OrderForm extends Component {
     }
 }
 
-export default connect(mapStateToProps, null)(OrderForm);
+export default connect(mapStateToProps, null)(withRouter(OrderForm));
