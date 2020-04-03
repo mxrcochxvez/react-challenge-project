@@ -7,7 +7,7 @@ export default (state = INITIAL_STATE, action) => {
         case LOGIN:
             return { ...state, email: action.payload.login, token: action.payload.token }
         case LOGOUT:
-            return { ...state, ...INITIAL_STATE }
+            return { ...state, ...INITIAL_STATE, email: action.payload, token: action.payload }
         default:
             return state;
     }
