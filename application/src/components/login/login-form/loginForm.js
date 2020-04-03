@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'; 
-import { loginUser } from '../../../redux/actions/authActions'
+import { loginUser } from '../../../redux/actions/authActions';
+import { withRouter } from 'react-router-dom';
 
 const mapActionsToProps = dispatch => ({
   commenceLogin(email, password) {
@@ -17,7 +18,12 @@ class LoginForm extends Component {
   login(e) {
     e.preventDefault();
     this.props.commenceLogin(this.state.email, this.state.password);
-    this.props.onLogin();
+    //I am having a bug where the user has to log into twice to get authorization to use the application
+    //I believe this is because the user is being sent to the new route before they are authenticated
+    //So it redirects them back to the /login route. I attempted to resolve that here by
+    //moving the props.history.push from the login.js file and into this document but it is stil
+    //happening. 
+    this.props.history.push("/order");
   }
 
   onChange(key, val) {
@@ -43,4 +49,4 @@ class LoginForm extends Component {
   }
 }
 
-export default connect(null, mapActionsToProps)(LoginForm);
+export default connect(null, mapActionsToProps)(withRouter(LoginForm));

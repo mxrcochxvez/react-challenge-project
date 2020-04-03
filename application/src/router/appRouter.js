@@ -24,7 +24,9 @@ const AppRouter = (props) => {
     <Router>
       <Route path="/" exact component={Main} />
       <Route path="/login" exact component={Login} />
-      <PrivateRoute path="/order" exact Component={OrderForm} auth={auth} />
+      {/* I had this set to a private route as well but I kept getting a bug where it would ask the
+      user to sign in twice. */}
+      <Route path="/order" exact component={OrderForm} />
       <PrivateRoute path="/view-orders" exact Component={ViewOrders} auth={auth} />
     </Router>
   );
