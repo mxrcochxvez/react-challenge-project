@@ -22,9 +22,11 @@ class ViewOrders extends Component {
     }
 
     deleteOrder = userId => {
-
+        //When the order gets deleted, you have to refresh the page 
         fetch(`${SERVER_IP}/api/delete-order`, { method: "post", headers: { "Accept": "application/json", "Content-type": "application/json" }, body: JSON.stringify({ id: userId }) })
-            .then(response => response.json())
+            .then(response => response.json());
+        //This is what I tried to use to fix the refresh issue. This did not work.
+        this.forceUpdate();
     }
 
     pushOrder = (order) => {
